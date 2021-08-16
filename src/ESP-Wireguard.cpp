@@ -103,3 +103,5 @@ bool WireguardClass::linkDown()
 {
     netif_set_down(this->_wg_netif);
 }
+
+WireguardClass Wireguard;
