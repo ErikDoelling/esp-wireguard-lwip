@@ -23,21 +23,21 @@ bool WireguardClass::begin(const char* m_privKey, uint16_t m_listenPort, netif *
                            const char* m_ipaddr, const char* m_netmask, const char* m_gateway)
 {
     struct wireguardif_init_data wg;
-    this->_wg.private_key = m_privKey.c_str(),
+    this->_wg.private_key = m_privKey,
     this->_wg.listen_port = m_listenPort;
     this->_wg.bind_netif = m_bindNetif;
 
-    if (!ipaddr_aton(m_ipaddr.c_str(), &this->_ipaddr))
+    if (!ipaddr_aton(m_ipaddr, &this->_ipaddr))
     {
         ESP_LOGE(wg_tag, "IP address wrong");
         return false;
     }
-    if (!ipaddr_aton(m_netmask.c_str(), &this->_netmask))
+    if (!ipaddr_aton(m_netmask, &this->_netmask))
     {
         ESP_LOGE(wg_tag, "Netmask wrong");
         return false;
     }
-    if (!ipaddr_aton(m_gateway.c_str(), &this->_gateway))
+    if (!ipaddr_aton(m_gateway, &this->_gateway))
     {
         ESP_LOGE(wg_tag, "Gateway address wrong");
         return false;
@@ -63,11 +63,11 @@ bool WireguardClass::addPeer(const char* m_pubKey, const char* m_psk,
 
     wireguardif_peer_init(&peer);
 
-    peer.public_key = m_pubKey.c_str();
-    peer.preshared_key = (const uint8_t *)m_psk.c_str();
-    ipaddr_aton(m_allowedIPs.c_str(), &peer.allowed_ip);
-    ipaddr_aton(m_allowedMask.c_str(), &peer.allowed_mask);
-    ipaddr_aton(m_endpointIP.c_str(), &peer.endpoint_ip);
+    peer.public_key = m_pubKey;
+    peer.preshared_key = (const uint8_t *)m_psk;
+    ipaddr_aton(m_allowedIPs, &peer.allowed_ip);
+    ipaddr_aton(m_allowedMask, &peer.allowed_mask);
+    ipaddr_aton(m_endpointIP, &peer.endpoint_ip);
     peer.endport_port = m_endpointPort;
     if (m_keepalive) {
         peer.keep_alive = m_keepalive;
