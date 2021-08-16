@@ -40,8 +40,8 @@
 #include <vector>
 extern "C"
 {
-#include "src/wireguard.h"
-#include "src/wireguardif.h"
+#include "wireguard.h"
+#include "wireguardif.h"
 #include "lwip/netif.h"
 #include "lwip/ip.h"
 
