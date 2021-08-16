@@ -23,9 +23,9 @@ bool WireguardClass::begin(const char* m_privKey, uint16_t m_listenPort, netif *
                            const char* m_ipaddr, const char* m_netmask, const char* m_gateway)
 {
     struct wireguardif_init_data wg;
-    this->_wg.private_key = m_privKey,
-    this->_wg.listen_port = m_listenPort;
-    this->_wg.bind_netif = m_bindNetif;
+    wg.private_key = m_privKey,
+    wg.listen_port = m_listenPort;
+    wg.bind_netif = m_bindNetif;
 
     if (!ipaddr_aton(m_ipaddr, &this->_ipaddr))
     {
