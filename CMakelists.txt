@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.16.0)
+
+FILE(GLOB_RECURSE wireguard_sources src/*.*)
+FILE(GLOB_RECURSE crypto_sources src/crypto/*.c)
+
+idf_component_register(SRCS ${wireguard_sources} ${crypto_sources}
+                        INCLUDE_DIRS src src/crypto
+                        REQUIRES lwip freertos)
