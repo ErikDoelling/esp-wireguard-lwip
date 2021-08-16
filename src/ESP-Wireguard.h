@@ -51,19 +51,10 @@ extern "C"
 #endif
 }
 
-typedef enum
-{
-    WG_CONNECTION_LOST = 2,
-    WG_CONNECTED = 3
-} wg_status_t;
 
 class WireguardClass
 {
 private:
-    struct wireguardif_init_data _wg {0};
-    static netif _wg_netif_struct;
-    netif *_wg_netif{NULL};
-    uint8_t _wg_peer_index{WIREGUARDIF_INVALID_INDEX};
     bool _default_netif{true};
 
     ip_addr_t _ipaddr;
@@ -83,8 +74,6 @@ public:
     bool linkUp();
     bool linkDown();
 };
-
-
 
 extern WireguardClass Wireguard;
 
