@@ -19,8 +19,8 @@ static struct netif _wg_netif_struct = {0};
 static struct netif *_wg_netif = NULL;
 static uint8_t _wg_peer_index = WIREGUARDIF_INVALID_INDEX;
 
-bool WireguardClass::begin(std::string m_privKey, uint16_t m_listenPort, netif *m_bindNetif,
-                           std::string m_ipaddr, std::string m_netmask, std::string m_gateway)
+bool WireguardClass::begin(const char* m_privKey, uint16_t m_listenPort, netif *m_bindNetif,
+                           const char* m_ipaddr, const char* m_netmask, const char* m_gateway)
 {
     struct wireguardif_init_data wg;
     this->_wg.private_key = m_privKey.c_str(),
@@ -42,7 +42,7 @@ bool WireguardClass::begin(std::string m_privKey, uint16_t m_listenPort, netif *
         ESP_LOGE(wg_tag, "Gateway address wrong");
         return false;
     }
-    this->_wg_netif = netif_add(&this->_wg_netif_struct,
+    _wg_netif = netif_add(&_wg_netif_struct,
                                 &this->_ipaddr.u_addr.ip4,
                                 &this->_netmask.u_addr.ip4,
                                 &this->_gateway.u_addr.ip4,
@@ -54,12 +54,12 @@ bool WireguardClass::begin(std::string m_privKey, uint16_t m_listenPort, netif *
     return true;
 }
 
-bool WireguardClass::addPeer(std::string m_pubKey, std::string m_psk,
-                             std::string m_allowedIPs, std::string m_allowedMask,
-                             std::string m_endpointIP, unsigned short m_endpointPort,
-                             unsigned short m_keepalive)
+bool WireguardClass::addPeer(const char* m_pubKey, const char* m_psk,
+                             const char* m_allowedIPs, const char* m_allowedMask,
+                             const char* m_endpointIP, unsigned int m_endpointPort,
+                             unsigned int m_keepalive)
 {
-    static struct wireguardif_peer peer;
+    struct wireguardif_peer peer;
 
     wireguardif_peer_init(&peer);
 
@@ -73,7 +73,7 @@ bool WireguardClass::addPeer(std::string m_pubKey, std::string m_psk,
         peer.keep_alive = m_keepalive;
     }
 
-    err_t result = wireguardif_add_peer(this->_wg_netif, &peer, &(this->_wg_peer_index));
+    err_t result = wireguardif_add_peer(_wg_netif, &peer, &_wg_peer_index);
     switch (result)
     {
     case ERR_ARG:
@@ -92,7 +92,7 @@ bool WireguardClass::addPeer(std::string m_pubKey, std::string m_psk,
 
 bool WireguardClass::connect()
 {
-    err_t result = wireguardif_connect(this->_wg_netif, this->_wg_peer_index);
+    err_t result = wireguardif_connect(_wg_netif, _wg_peer_index);
     if (result == ERR_ARG) {
         ESP_LOGE(wg_tag, "Illegal argument");
         return false;
@@ -103,7 +103,7 @@ bool WireguardClass::connect()
 
 bool WireguardClass::disconnect()
 {
-    err_t result = wireguardif_disconnect(this->_wg_netif, this->_wg_peer_index);
+    err_t result = wireguardif_disconnect(_wg_netif, _wg_peer_index);
     if (result != ERR_OK) {
         ESP_LOGE(wg_tag, "Diconnect failed");
         return false;
@@ -113,12 +113,12 @@ bool WireguardClass::disconnect()
 
 void WireguardClass::linkUp()
 {
-    netif_set_up(this->_wg_netif);
+    netif_set_up(_wg_netif);
 }
 
 void WireguardClass::linkDown()
 {
-    netif_set_down(this->_wg_netif);
+    netif_set_down(_wg_netif);
 }
 
 WireguardClass Wireguard;

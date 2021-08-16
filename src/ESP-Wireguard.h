@@ -62,17 +62,17 @@ private:
     ip_addr_t _gateway;
 
 public:
-    bool begin(std::string m_privKey, uint16_t m_listenPort, netif *m_bindNetif,
-               std::string m_ipaddr, std::string m_netmask, std::string m_gateway);
+    bool begin(const char* m_privKey, uint16_t m_listenPort, netif *m_bindNetif,
+               const char* m_ipaddr, const char* m_netmask, const char* m_gateway);
     bool connect();
     bool disconnect();
-    bool addPeer(std::string m_pubKey, std::string m_psk,
-                 std::string m_allowedIPs, std::string m_allowedMask,
-                 std::string m_endpointIP, unsigned short m_endpointPort,
-                 unsigned short m_keepalive);
-    bool removePeer(std::string m_pubKey);
-    bool linkUp();
-    bool linkDown();
+    bool addPeer(const char* m_pubKey, const char* m_psk,
+                 const char* m_allowedIPs, const char* m_allowedMask,
+                 const char* m_endpointIP, unsigned int m_endpointPort,
+                 unsigned int m_keepalive);
+    bool removePeer(const char* m_pubKey);
+    void linkUp();
+    void linkDown();
 };
 
 extern WireguardClass Wireguard;
